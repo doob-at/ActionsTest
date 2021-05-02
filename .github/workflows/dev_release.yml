@@ -1,8 +1,8 @@
-name: Release Build
+name: Dev Build
 
 on:
-  pull_request:
-    branches: [ main ]
+  push:
+    branches: [ dev ]
 
 jobs:
   build:
