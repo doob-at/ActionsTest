@@ -1,8 +1,8 @@
-name: Release Build
+name: Dev Test
 
 on:
-  push:
-    branches: [ main ]
+  pull-request:
+    branches: [ dev ]
 
 jobs:
   build:
