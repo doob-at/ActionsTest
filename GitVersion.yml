@@ -1,0 +1,7 @@
+mode: ContinuousDelivery
+branches: 
+  develop:
+    tag: beta
+ignore:
+  sha: []
+merge-message-formats: {}
