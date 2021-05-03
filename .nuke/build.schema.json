@@ -49,6 +49,9 @@
         "NugetApiUrl": {
           "type": "string"
         },
+        "NugetSymbolSource": {
+          "type": "string"
+        },
         "Plan": {
           "type": "boolean",
           "description": "Shows the execution plan (HTML)"
