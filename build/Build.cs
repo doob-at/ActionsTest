@@ -77,6 +77,7 @@ class Build : NukeBuild
         {
             DotNetPack(s => s
                 .EnableNoBuild()
+                .SetConfiguration(Configuration)
                 .SetVersion(GitVersion.NuGetVersionV2)
                 .SetOutputDirectory(OutputDirectory)
                 .EnableIncludeSymbols()
