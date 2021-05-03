@@ -11,10 +11,10 @@ namespace TestProject1
         {
             var tb = new TupleBuilder();
 
-            var t = tb.Build(1, "2");
+            var (first, second) = tb.Build(1, "2");
 
-            Assert.Equal(1, t.Item1);
-            Assert.Equal("2", t.Item2);
+            Assert.Equal(1, first);
+            Assert.Equal("2", second);
         }
     }
 }
