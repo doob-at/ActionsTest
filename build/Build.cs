@@ -25,6 +25,7 @@ class Build : NukeBuild
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
     [Parameter] string NugetApiUrl = "https://api.nuget.org/v3/index.json"; //default
+    [Parameter] string NugetSymbolSource = "https://f.feedz.io/doob/dev/symbols"; //default
     [Parameter] string NugetApiKey;
 
     [Solution] readonly Solution Solution;
@@ -98,6 +99,7 @@ class Build : NukeBuild
                 {
                     DotNetNuGetPush(s => s
                         .SetTargetPath(x)
+                        .SetSymbolSource(NugetSymbolSource)
                         .SetSource(NugetApiUrl)
                         .SetApiKey(NugetApiKey)
                     );
