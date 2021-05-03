@@ -8,5 +8,10 @@ namespace ActionsTest
         {
             return (value1, value2);
         }
+
+        public (T1, T2, T3) Build<T1, T2, T3>(T1 value1, T2 value2, T3 value3)
+        {
+            return (value1, value2, value3);
+        }
     }
 }
