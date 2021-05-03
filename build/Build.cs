@@ -19,14 +19,17 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 [ShutdownDotNetAfterServerBuild]
 class Build : NukeBuild
 {
-    public static int Main () => Execute<Build>(x => x.Compile);
+    public static int Main () => Execute<Build>(x => x.Pack);
 
     [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
     readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
+    [Parameter] string NugetApiUrl = "https://api.nuget.org/v3/index.json"; //default
+    [Parameter] string NugetApiKey;
+
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    [GitVersion] readonly GitVersion GitVersion;
+    [GitVersion(Framework = "net5.0")] readonly GitVersion GitVersion;
 
     AbsolutePath OutputDirectory => RootDirectory / "output";
 
@@ -57,15 +60,44 @@ class Build : NukeBuild
                 .EnableNoRestore());
         });
 
-    Target Pack => _ => _
+    Target Test => _ => _
         .DependsOn(Compile)
+        .Executes(() =>
+        {
+            DotNetTest(c => c
+                .SetConfiguration(Configuration)
+                .EnableNoBuild()
+            );
+        });
+
+    Target Pack => _ => _
+        .DependsOn(Test, Clean)
         .Executes(() =>
         {
             DotNetPack(s => s
                 .EnableNoBuild()
                 .SetVersion(GitVersion.NuGetVersionV2)
                 .SetOutputDirectory(OutputDirectory)
+                .EnableIncludeSymbols()
             );
         });
 
+    Target Push => _ => _
+        .DependsOn(Pack)
+        .Requires(() => NugetApiUrl)
+        .Requires(() => NugetApiKey)
+        .Requires(() => Configuration.Equals(Configuration.Release))
+        .Executes(() =>
+        {
+            GlobFiles(OutputDirectory, "*.nupkg")
+                .NotEmpty()
+                .ForEach(x =>
+                {
+                    DotNetNuGetPush(s => s
+                        .SetTargetPath(x)
+                        .SetSource(NugetApiUrl)
+                        .SetApiKey(NugetApiKey)
+                    );
+                });
+        });
 }
