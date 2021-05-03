@@ -1,7 +1,7 @@
-name: Release Build
+name: Pull Request Test
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -19,4 +19,3 @@ jobs:
         dotnet-version: 5.0.x
     - name: Nuke Build
       run: ./build.ps1 Pack
-
