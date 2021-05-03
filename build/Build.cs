@@ -37,6 +37,7 @@ class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
+            Logger.Info(GitVersion.NuGetVersionV2);
             EnsureCleanDirectory(OutputDirectory);
         });
 
