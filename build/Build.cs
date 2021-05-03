@@ -93,6 +93,7 @@ class Build : NukeBuild
         {
             GlobFiles(OutputDirectory, "*.nupkg")
                 .NotEmpty()
+                .Where(x => !x.EndsWith("symbols.nupkg"))
                 .ForEach(x =>
                 {
                     DotNetNuGetPush(s => s

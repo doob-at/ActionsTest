@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-2019
+    runs-on: windows-2016
 
     steps:
     - uses: actions/checkout@v2
@@ -17,12 +17,8 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: prepare Nuke Build
-      run: ./build.ps1
-    - name: invoke Nuke Build
-      run: | 
-        ./build.ps1 Pack
-        ./build.ps1 Push
+    - name: Nuke Build
+      run: ./build.ps1 Push
       env: 
         NugetApiUrl: "https://f.feedz.io/doob/dev/nuget/index.json"
         NugetApiKey: ${{ secrets.FEEDZAPIKEY }}
